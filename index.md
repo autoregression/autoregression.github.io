@@ -1,5 +1,3 @@
-# Autoregression's Homepage
-
 ```
 I
 I like
