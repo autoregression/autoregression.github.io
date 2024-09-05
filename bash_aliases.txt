@@ -47,3 +47,21 @@ function gpu() {
         echo "occupied"
     fi
 }
+
+function gpus() {
+    total_gpus=$(nvidia-smi --query-gpu=index --format=csv,noheader | wc -l)
+    in_use_gpus=()
+
+    for ((i=0; i<total_gpus; i++)); do
+        usage=$(nvidia-smi -i "$i" --query-compute-apps=pid --format=csv,noheader,nounits | wc -l)
+        if [ "$usage" -gt 0 ]; then
+            in_use_gpus+=("$i")
+        fi
+    done
+
+    if [ ${#in_use_gpus[@]} -gt 0 ]; then
+        echo "${in_use_gpus[*]}" | sed 's/ /,/g'
+    else
+        echo "No GPUs in use."
+    fi
+}
