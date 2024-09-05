@@ -42,8 +42,8 @@ function gpu() {
     usage=$(nvidia-smi -i "$1" --query-compute-apps=pid --format=csv,noheader,nounits | wc -l)
 
     if [ "$usage" -eq 0 ]; then
-        echo "yes"
+        echo "free"
     else
-        echo "no"
+        echo "occupied"
     fi
 }
