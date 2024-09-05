@@ -27,3 +27,23 @@ function tt {
   local path=$2
   CUDA_VISIBLE_DEVICES=$devices WANDB_MODE=disabled COMPILE=false python train.py $path
 }
+
+function gpu() {
+    if [ -z "$1" ]; then
+        echo "Usage: gpu [i]"
+        return 1
+    fi
+
+    if ! nvidia-smi -i "$1" > /dev/null 2>&1; then
+        echo "GPU $1 does not exist."
+        return 1
+    fi
+
+    usage=$(nvidia-smi -i "$1" --query-compute-apps=pid --format=csv,noheader,nounits | wc -l)
+
+    if [ "$usage" -eq 0 ]; then
+        echo "yes"
+    else
+        echo "no"
+    fi
+}
