@@ -16,6 +16,23 @@ function gc {
   git commit -m "$message"
 }
 
+function gk {
+  local branch=$1
+  if [ -z "$branch" ]; then
+    echo "Usage: ck <branch>"
+    return 1
+  fi
+
+  # Check if the branch exists locally or remotely
+  if git show-ref --verify --quiet refs/heads/$branch || git ls-remote --exit-code --heads origin $branch; then
+    git checkout $branch
+  else
+    git checkout -b $branch
+  fi
+
+  git pull origin $branch
+}
+
 function t {
   local devices=${1:-0}
   local path=$2
